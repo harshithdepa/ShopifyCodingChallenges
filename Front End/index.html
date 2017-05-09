@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="./styles.css">
+    <meta charset="utf-8">
+    <title>Password Reset</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="./form-validation.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
+  </head>
+  <body>
+    <div class="object">
+      <h1>Forgot your password?</h1>
+      <div class="green">
+      </div>
+      <h2>Enter your email address to reset your password</h2>
+    <form name="myForm" id="form" action="/action_page_post.php" method="post">
+        <h3>EMAIL</h3>
+        <input type ="text" id="email" name = "email" placeholder="Enter your email address"><input id="submit" type="submit" value="Submit" >
+        <div id="error" class="errortxt">There is something wrong with your email.</div>
+    </form>
+  </div>
+  </body>
+</html>
