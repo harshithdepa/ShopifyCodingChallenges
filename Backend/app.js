@@ -6,16 +6,20 @@ var pg1 = {
   json: true
 }
 
- function hasCookie(products){
+ function hasCookie(order){
   var cookie = false;
-  products.forEach(function(product){
-    if(product.title == "Cookie"){
+  for (var i = 0; i < order.products.length; i++) {
+    if(order.products[i].title === "Cookie"){
       cookie = true;
+      order.cksWant = order.products[i].amount;
     }
-  })
+    // if(products[i].title !== "Cookie"){
+    //   products.splice(i, 1);
+    //   i--;
+    // }
+  }
   return cookie;
   }
-
 request(pg1)
 .then(function(response){
   var cookies_left = response.available_cookies;
@@ -34,15 +38,37 @@ Promise.all(ps)
       orders = orders.concat(results[i].orders);
     }
     orders = orders.filter(function(order){
-     return hasCookie(order.products) && !order.fulfilled
+     return hasCookie(order) && !order.fulfilled
    })
    orders.sort(function(a, b){
-     a.products.
+     return b.cksWant - a.cksWant;
    })
+   for (var i = 0; i < orders.length; i++) {
+     if(orders[i].cksWant <= cookies_left){
+       cookies_left -= orders[i].cksWant;
+       orders.splice(i, 1);
+       i--;
+     }
+     }
       // //console.log(orders[0].products);
       // console.log(hasCookie(orders[0].products));
-     console.log(orders);
-
+      orders.sort(function (a, b) {
+        return a.id - b.id;
+      })
+     var result = {
+       "remaining_cookies": cookies_left,
+       "unfulfilled_orders": [],
+     }
+     for (var i = 0; i < orders.length; i++) {
+       result.unfulfilled_orders.push(orders[i].id);
+     }
+     var shopdata = {
+    url: 'http://localhost/spot',
+    method: "POST",
+    body: result,
+    json: true,
+  }
+     //console.log(result);
   })
   .catch(err => console.log(err));
 })
